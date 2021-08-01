@@ -1,0 +1,10 @@
+version: "3"
+services:
+  go-graphql:
+    build: 
+      context: .
+      dockerfile: docker/go/Dockerfile
+    volumes:
+      - .:/go_graphql_app
+    tty: true
+    container_name: go-graphql
