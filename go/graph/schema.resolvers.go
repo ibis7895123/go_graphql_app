@@ -9,6 +9,7 @@ import (
 
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
 	"github.com/ibis7895123/go_graphql_app/graph/model"
+	"github.com/ibis7895123/go_graphql_app/src/database"
 	"github.com/ibis7895123/go_graphql_app/src/models"
 	"github.com/ibis7895123/go_graphql_app/src/util"
 )
@@ -34,9 +35,21 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	log.Printf("[mutationResolver.CreateUser] input: %v", input)
 
 	id := util.CreateUniqueID()
-	err
+	err := database.NewUserDao(r.DB).InsertOne(
+		&database.User{
+			ID:   id,
+			Name: input.Name,
+		})
 
-	return &models.User{}, nil
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	return &models.User{
+		ID:   id,
+		Name: input.Name,
+	}, nil
 }
 
 // GETスキーマ関数
