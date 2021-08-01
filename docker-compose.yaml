@@ -24,5 +24,6 @@ services:
       MYSQL_USER: localuser
       MYSQL_PASSWORD: localpass
       MYSQL_DATABASE: localdb
+      TZ: 'Asia/Tokyo'
     container_name: mysql-graphql
     restart: always
