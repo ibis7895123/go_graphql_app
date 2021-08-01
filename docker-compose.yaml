@@ -10,3 +10,17 @@ services:
       - 8080:8080
     tty: true
     container_name: go-graphql
+  mysql-graphql:
+    image: mysql:8.0
+    ports:
+      - 3316:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: localuser
+      MYSQL_PASSWORD: localpass
+      MYSQL_DATABASE: localdb
+    container_name: mysql-graphql
+    restart: always
