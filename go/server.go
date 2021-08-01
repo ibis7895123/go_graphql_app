@@ -19,7 +19,9 @@ const dbUser = "localuser"
 const dbPassword = "localpass"
 const dbProtocol = "tcp(mysql-graphql:3306)"
 const dbName = "localdb"
-const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName
+
+// timestampを扱うためにparseTime=trueが必要
+const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName + "?parseTime=true"
 
 func main() {
 	port := os.Getenv("PORT")
