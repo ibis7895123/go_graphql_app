@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: docker/go/Dockerfile
     volumes:
-      - ./src:/go_graphql_app
+      - ./go:/go_graphql_app
     ports:
       - 8080:8080
     tty: true
