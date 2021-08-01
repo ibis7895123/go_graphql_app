@@ -55,7 +55,9 @@ func (userDao *UserDao) InsertOne(user *User) error {
 func (userDao *UserDao) FindAll() ([]*User, error) {
 	var users []*User
 	// ユーザー全取得
-	response := userDao.db.Find(&users)
+	response := userDao.db.
+		Order("updated_at desc").
+		Find(&users)
 
 	// DBエラー
 	if err := response.Error; err != nil {

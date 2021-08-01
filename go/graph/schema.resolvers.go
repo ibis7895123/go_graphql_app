@@ -74,7 +74,27 @@ func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, erro
 func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 	log.Printf("[queryResolver.Users]")
 
-	return []*models.User{}, nil
+	users, err := database.NewUserDao(r.DB).FindAll()
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	// jsonデータに変換
+	var jsonUsers []*models.User
+	for _, user := range users {
+		jsonUsers = append(
+			jsonUsers,
+			&models.User{
+				ID:        user.ID,
+				Name:      user.Name,
+				CreatedAt: user.CreatedAt,
+				UpdatedAt: user.UpdatedAt,
+			})
+	}
+
+	return jsonUsers, nil
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
