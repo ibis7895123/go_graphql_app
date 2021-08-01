@@ -5,45 +5,13 @@ package graph
 
 import (
 	"context"
+	"log"
 
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
 	"github.com/ibis7895123/go_graphql_app/graph/model"
+	"github.com/ibis7895123/go_graphql_app/src/models"
+	"github.com/ibis7895123/go_graphql_app/src/util"
 )
-
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	return &model.Todo{
-		ID:   "todo001",
-		Text: "部屋の掃除",
-		Done: false,
-		User: &model.User{
-			ID:   "user001",
-			Name: "太郎",
-		},
-	}, nil
-}
-
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return []*model.Todo{
-		{
-			ID:   "todo001",
-			Text: "部屋の掃除",
-			Done: false,
-			User: &model.User{
-				ID:   "user001",
-				Name: "太郎",
-			},
-		},
-		{
-			ID:   "todo002",
-			Text: "買い物",
-			Done: true,
-			User: &model.User{
-				ID:   "user001",
-				Name: "太郎",
-			},
-		},
-	}, nil
-}
 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
@@ -51,5 +19,55 @@ func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResol
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+func (r *Resolver) Todo() generated.TodoResolver { return &todoResolver{r} }
+
+func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
+
+// 更新スキーマ関数
 type mutationResolver struct{ *Resolver }
+
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*models.Todo, error) {
+	return &models.Todo{}, nil
+}
+
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*models.User, error) {
+	log.Printf("[mutationResolver.CreateUser] input: %v", input)
+
+	id := util.CreateUniqueID()
+	err
+
+	return &models.User{}, nil
+}
+
+// GETスキーマ関数
 type queryResolver struct{ *Resolver }
+
+func (r *queryResolver) Todos(ctx context.Context) ([]*models.Todo, error) {
+	return []*models.Todo{}, nil
+}
+
+func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, error) {
+	return &models.Todo{}, nil
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
+	return []*models.User{}, nil
+}
+
+func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
+	return &models.User{}, nil
+}
+
+type todoResolver struct{ *Resolver }
+
+// todoが呼ばれたときにuserを取得
+func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User, error) {
+	return &models.User{}, nil
+}
+
+type userResolver struct{ *Resolver }
+
+// userが呼ばれたときにtodosを取得
+func (r *userResolver) Todos(ctx context.Context, obj *models.User) ([]*models.Todo, error) {
+	return []*models.Todo{}, nil
+}
