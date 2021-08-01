@@ -5,18 +5,44 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
 	"github.com/ibis7895123/go_graphql_app/graph/model"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
+	return &model.Todo{
+		ID:   "todo001",
+		Text: "部屋の掃除",
+		Done: false,
+		User: &model.User{
+			ID:   "user001",
+			Name: "太郎",
+		},
+	}, nil
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
+	return []*model.Todo{
+		{
+			ID:   "todo001",
+			Text: "部屋の掃除",
+			Done: false,
+			User: &model.User{
+				ID:   "user001",
+				Name: "太郎",
+			},
+		},
+		{
+			ID:   "todo002",
+			Text: "買い物",
+			Done: true,
+			User: &model.User{
+				ID:   "user001",
+				Name: "太郎",
+			},
+		},
+	}, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
