@@ -46,7 +46,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		})
 
 	if err != nil {
-		log.Print(err.Error())
+		log.Fatal(err.Error())
 		return nil, err
 	}
 
@@ -77,7 +77,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 	users, err := database.NewUserDao(r.DB).FindAll()
 
 	if err != nil {
-		log.Print(err.Error())
+		log.Fatal(err.Error())
 		return nil, err
 	}
 
@@ -103,7 +103,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 	user, err := database.NewUserDao(r.DB).FindOne(id)
 
 	if err != nil {
-		log.Print(err.Error())
+		log.Fatal(err.Error())
 		return nil, err
 	}
 
