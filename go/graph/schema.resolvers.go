@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
 	"github.com/ibis7895123/go_graphql_app/graph/model"
@@ -38,8 +39,10 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	id := util.CreateUniqueID()
 	err := database.NewUserDao(r.DB).InsertOne(
 		&database.User{
-			ID:   id,
-			Name: input.Name,
+			ID:        id,
+			Name:      input.Name,
+			CreatedAt: time.Now().Format("2006-01-02 03:04:05"),
+			UpdatedAt: time.Now().Format("2006-01-02 03:04:05"),
 		})
 
 	if err != nil {
@@ -48,8 +51,10 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	}
 
 	return &models.User{
-		ID:   id,
-		Name: input.Name,
+		ID:        id,
+		Name:      input.Name,
+		CreatedAt: time.Now().Format("2006-01-02 03:04:05"),
+		UpdatedAt: time.Now().Format("2006-01-02 03:04:05"),
 	}, nil
 }
 
