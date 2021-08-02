@@ -20,7 +20,7 @@ const dbPassword = "localpass"
 const dbProtocol = "tcp(mysql-graphql:3306)"
 const dbName = "localdb"
 
-// timestampを扱うためにparseTime=trueが必要
+// time.Timeを扱うためにparseTime=trueが必要
 const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName + "?parseTime=true"
 
 func main() {
