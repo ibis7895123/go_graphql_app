@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: localdb
--- Generation Time: 2021-08-02 00:01:28.8330
+-- Generation Time: 2021-08-02 19:49:51.1040
 -- -------------------------------------------------------------
 
 
@@ -24,8 +24,8 @@ CREATE TABLE `todo` (
   `text` varchar(255) NOT NULL,
   `done` tinyint(1) NOT NULL,
   `user_id` varchar(64) NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -33,15 +33,19 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `user` (`id`, `name`, `created_at`, `updated_at`) VALUES
 ('122f1a5a728b413c982ae835cf0d84c9', '太郎', '2021-08-01 23:52:20', '2021-08-01 23:53:10'),
+('229c019ab5794f87bcbe705e66875ad5', 'ダンカン', '2021-08-02 12:12:02', '2021-08-02 12:12:02'),
 ('2fd76f83d5a5421aad0fda992c23709a', 'John', '2021-08-01 23:59:47', '2021-08-02 00:01:10'),
-('d19b1061e2d649e1a245f31e36275902', '花子', '2021-08-01 23:52:40', '2021-08-01 23:53:20');
+('3bc8cf432c64474b9ff54ede13c9457a', 'ランド', '2021-08-02 12:13:39', '2021-08-02 12:13:39'),
+('8ad28da8f22d4a4e98e1c9b477a2186b', 'ロック', '2021-08-02 12:20:28', '2021-08-02 12:20:28'),
+('d19b1061e2d649e1a245f31e36275902', '花子', '2021-08-01 23:52:40', '2021-08-01 23:53:20'),
+('ee2e0dba5f86404996f1b29507cf1443', 'ラスティ', '2021-08-02 01:06:38', '2021-08-02 01:06:38');
 
 
 
