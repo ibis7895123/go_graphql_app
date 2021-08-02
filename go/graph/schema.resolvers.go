@@ -122,9 +122,19 @@ func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User
 	log.Printf("[todoResolver.User] user: %v", obj)
 
 	// todoIDからユーザーを取得
-	// user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
+	user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
 
-	return &models.User{}, nil
+	if err != nil {
+		log.Fatal(err.Error())
+		return nil, err
+	}
+
+	return &models.User{
+		ID:        user.ID,
+		Name:      user.Name,
+		CreatedAt: user.CreatedAt.String(),
+		UpdatedAt: user.UpdatedAt.String(),
+	}, nil
 }
 
 type userResolver struct{ *Resolver }
