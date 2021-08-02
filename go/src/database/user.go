@@ -2,15 +2,16 @@ package database
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
 
 type User struct {
-	ID        string `gorm:"column:id;primary_key"`
-	Name      string `gorm:"column:name"`
-	CreatedAt string `gorm:"column:created_at"`
-	UpdatedAt string `gorm:"column:updated_at"`
+	ID        string    `gorm:"column:id;primary_key"`
+	Name      string    `gorm:"column:name"`
+	CreatedAt time.Time `gorm:"column:created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at"`
 }
 
 func (user *User) TableName() string {

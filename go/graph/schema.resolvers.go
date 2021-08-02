@@ -41,8 +41,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		&database.User{
 			ID:        id,
 			Name:      input.Name,
-			CreatedAt: time.Now().Format("2006-01-02 03:04:05"),
-			UpdatedAt: time.Now().Format("2006-01-02 03:04:05"),
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
 		})
 
 	if err != nil {
@@ -53,8 +53,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	return &models.User{
 		ID:        id,
 		Name:      input.Name,
-		CreatedAt: time.Now().Format("2006-01-02 03:04:05"),
-		UpdatedAt: time.Now().Format("2006-01-02 03:04:05"),
+		CreatedAt: time.Now().String(),
+		UpdatedAt: time.Now().String(),
 	}, nil
 }
 
@@ -89,8 +89,8 @@ func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 			&models.User{
 				ID:        user.ID,
 				Name:      user.Name,
-				CreatedAt: user.CreatedAt,
-				UpdatedAt: user.UpdatedAt,
+				CreatedAt: user.CreatedAt.String(),
+				UpdatedAt: user.UpdatedAt.String(),
 			})
 	}
 
@@ -110,8 +110,8 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 	return &models.User{
 		ID:        user.ID,
 		Name:      user.Name,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+		CreatedAt: user.CreatedAt.String(),
+		UpdatedAt: user.UpdatedAt.String(),
 	}, nil
 }
 
@@ -119,7 +119,11 @@ type todoResolver struct{ *Resolver }
 
 // todoが呼ばれたときにuserを取得
 func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User, error) {
-	log.Printf("[todoResolver.User]")
+	log.Printf("[todoResolver.User] user: %v", obj)
+
+	// todoIDからユーザーを取得
+	// user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
+
 	return &models.User{}, nil
 }
 
@@ -127,6 +131,6 @@ type userResolver struct{ *Resolver }
 
 // userが呼ばれたときにtodosを取得
 func (r *userResolver) Todos(ctx context.Context, obj *models.User) ([]*models.Todo, error) {
-	log.Printf("[userResolver.Todo]")
+	log.Printf("[userResolver.Todos]")
 	return []*models.Todo{}, nil
 }

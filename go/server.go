@@ -21,7 +21,8 @@ const dbProtocol = "tcp(mysql-graphql:3306)"
 const dbName = "localdb"
 
 // time.Timeを扱うためにparseTime=trueが必要
-const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName + "?parseTime=true"
+// タイムゾーンをJSTにする
+const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
 
 func main() {
 	port := os.Getenv("PORT")
