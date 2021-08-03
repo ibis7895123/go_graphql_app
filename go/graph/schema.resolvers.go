@@ -87,7 +87,30 @@ type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*models.Todo, error) {
 	log.Printf("[queryResolver.Todos]")
-	return []*models.Todo{}, nil
+
+	todos, err := database.NewTodoDao(r.DB).FindAll()
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	// jsonデータに変換
+	var jsonTodos []*models.Todo
+	for _, todo := range todos {
+		jsonTodos = append(
+			jsonTodos,
+			&models.Todo{
+				ID:        todo.ID,
+				Text:      todo.Text,
+				Done:      todo.Done,
+				UserID:    todo.UserID,
+				CreatedAt: todo.CreatedAt.String(),
+				UpdatedAt: todo.UpdatedAt.String(),
+			})
+	}
+
+	return jsonTodos, nil
 }
 
 func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, error) {

@@ -58,7 +58,7 @@ func (todoDao *TodoDao) InsertOne(todo *Todo) error {
 func (todoDao *TodoDao) FindAll() ([]*Todo, error) {
 	var todos []*Todo
 
-	response := todoDao.db.Find(todos)
+	response := todoDao.db.Find(&todos)
 
 	// DBエラー
 	if err := response.Error; err != nil {
@@ -78,7 +78,7 @@ func (todoDao *TodoDao) FindOne(id string) (*Todo, error) {
 
 	response := todoDao.db.
 		Where("id = ?", id).
-		First(todo)
+		First(&todo)
 
 	// DBエラー
 	if err := response.Error; err != nil {
@@ -98,7 +98,7 @@ func (todoDao *TodoDao) FindByUserID(userID string) ([]*Todo, error) {
 
 	response := todoDao.db.
 		Where("user_id = ?", userID).
-		Find(todos)
+		Find(&todos)
 
 	// DBエラー
 	if err := response.Error; err != nil {
