@@ -186,7 +186,7 @@ type todoResolver struct{ *Resolver }
 
 // todoが呼ばれたときにuserを取得
 func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User, error) {
-	log.Printf("[todoResolver.User] user: %v", obj)
+	log.Printf("[todoResolver.User] todo: %v", obj)
 
 	// todoIDからユーザーを取得
 	user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
@@ -208,6 +208,29 @@ type userResolver struct{ *Resolver }
 
 // userが呼ばれたときにtodosを取得
 func (r *userResolver) Todos(ctx context.Context, obj *models.User) ([]*models.Todo, error) {
-	log.Printf("[userResolver.Todos]")
-	return []*models.Todo{}, nil
+	log.Printf("[userResolver.Todos] user: %v", obj)
+
+	// ユーザーIDからtodosを取得
+	todos, err := database.NewTodoDao(r.DB).FindByUserID(obj.ID)
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	// jsonデータに変換
+	var jsonTodos []*models.Todo
+	for _, todo := range todos {
+		jsonTodos = append(
+			jsonTodos,
+			&models.Todo{
+				ID:        todo.ID,
+				Text:      todo.Text,
+				Done:      todo.Done,
+				CreatedAt: todo.CreatedAt.String(),
+				UpdatedAt: todo.UpdatedAt.String(),
+			})
+	}
+
+	return jsonTodos, nil
 }
