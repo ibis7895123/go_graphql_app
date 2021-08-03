@@ -90,13 +90,13 @@ func (userDao *UserDao) FindOne(id string) (*User, error) {
  * todoIDからユーザーを検索
  */
 func (userDao *UserDao) FindByTodoID(todoID string) (*User, error) {
-	var users []*User
+	var user User
 
 	response := userDao.db.Table("user").
 		Select("user.*").
 		Joins("LEFT JOIN todo ON todo.user_id = user.id").
 		Where("todo.id = ?", todoID).
-		First(&users)
+		First(&user)
 
 	// DBエラー
 	// データ無しの場合もここに入る
@@ -104,7 +104,7 @@ func (userDao *UserDao) FindByTodoID(todoID string) (*User, error) {
 		return nil, err
 	}
 
-	return users[0], nil
+	return &user, nil
 }
 
 /**
