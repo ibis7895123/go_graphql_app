@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
@@ -13,7 +12,11 @@ import (
 	"github.com/ibis7895123/go_graphql_app/src/database"
 	"github.com/ibis7895123/go_graphql_app/src/models"
 	"github.com/ibis7895123/go_graphql_app/src/util"
+	"go.uber.org/zap"
 )
+
+// ロガー
+var logger, _ = zap.NewDevelopment()
 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
@@ -29,13 +32,13 @@ func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*models.Todo, error) {
-	log.Printf("[mutationResolver.CreateTodo] input: %v", input)
+	logger.Info("[mutationResolver.CreateTodo] ", zap.Any("input", input))
 
 	// ユーザーIDがあるかどうかチェック
 	err := database.NewUserDao(r.DB).ExistUserID(input.UserID)
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -51,7 +54,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 		})
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -65,7 +68,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*models.User, error) {
-	log.Printf("[mutationResolver.CreateUser] input: %v", input)
+	logger.Info("[mutationResolver.CreateUser] ", zap.Any("input", input))
 
 	id := util.CreateUniqueID()
 	err := database.NewUserDao(r.DB).InsertOne(
@@ -77,7 +80,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		})
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -93,12 +96,12 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*models.Todo, error) {
-	log.Printf("[queryResolver.Todos]")
+	logger.Info("[queryResolver.Todos]")
 
 	todos, err := database.NewTodoDao(r.DB).FindAll()
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -120,12 +123,12 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*models.Todo, error) {
 }
 
 func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, error) {
-	log.Printf("[queryResolver.Todo] id: %s", id)
+	logger.Info("[queryResolver.Todo] ", zap.String("id", id))
 
 	todo, err := database.NewTodoDao(r.DB).FindOne(id)
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -139,12 +142,12 @@ func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, erro
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
-	log.Printf("[queryResolver.Users]")
+	logger.Info("[queryResolver.Users]")
 
 	users, err := database.NewUserDao(r.DB).FindAll()
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -165,12 +168,12 @@ func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
-	log.Printf("[queryResolver.User] id: %s", id)
+	logger.Info("[queryResolver.User] ", zap.String("id", id))
 
 	user, err := database.NewUserDao(r.DB).FindOne(id)
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -186,13 +189,13 @@ type todoResolver struct{ *Resolver }
 
 // todoが呼ばれたときにuserを取得
 func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User, error) {
-	log.Printf("[todoResolver.User] todo: %v", obj)
+	logger.Info("[todoResolver.User] ", zap.Any("todo", obj))
 
 	// todoIDからユーザーを取得
 	user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
@@ -208,13 +211,13 @@ type userResolver struct{ *Resolver }
 
 // userが呼ばれたときにtodosを取得
 func (r *userResolver) Todos(ctx context.Context, obj *models.User) ([]*models.Todo, error) {
-	log.Printf("[userResolver.Todos] user: %v", obj)
+	logger.Info("[userResolver.Todos] ", zap.Any("user", obj))
 
 	// ユーザーIDからtodosを取得
 	todos, err := database.NewTodoDao(r.DB).FindByUserID(obj.ID)
 
 	if err != nil {
-		log.Print(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 

@@ -10,6 +10,7 @@ import (
 	"github.com/ibis7895123/go_graphql_app/graph"
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
 	"github.com/jinzhu/gorm"
+	"go.uber.org/zap"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -23,6 +24,9 @@ const dbName = "localdb"
 // time.Timeを扱うためにparseTime=trueが必要
 // タイムゾーンをJSTにする
 const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
+
+// ロガー
+var logger, _ = zap.NewDevelopment()
 
 func main() {
 	port := os.Getenv("PORT")
@@ -62,6 +66,6 @@ func main() {
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	logger.Sugar().Infof("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
