@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -23,6 +22,7 @@ type UserDaoInterface interface {
 	FindAll() ([]*User, error)
 	FindOne(id string) (*User, error)
 	FindByTodoID(todoID string) (*User, error)
+	ExistUserID(id string) error
 }
 
 type UserDao struct {
@@ -72,22 +72,23 @@ func (userDao *UserDao) FindAll() ([]*User, error) {
  * 1ユーザーを検索
  */
 func (userDao *UserDao) FindOne(id string) (*User, error) {
-	var users []*User
-	response := userDao.db.Where("id = ?", id).Find(&users)
+	var user User
+	response := userDao.db.
+		Where("id = ?", id).
+		First(&user)
 
 	// DBエラー
+	// データ無しの場合もここに入る
 	if err := response.Error; err != nil {
 		return nil, err
 	}
 
-	// データなし
-	if len(users) == 0 {
-		return nil, fmt.Errorf("not found user")
-	}
-
-	return users[0], nil
+	return &user, nil
 }
 
+/**
+ * todoIDからユーザーを検索
+ */
 func (userDao *UserDao) FindByTodoID(todoID string) (*User, error) {
 	var users []*User
 
@@ -98,14 +99,29 @@ func (userDao *UserDao) FindByTodoID(todoID string) (*User, error) {
 		First(&users)
 
 	// DBエラー
+	// データ無しの場合もここに入る
 	if err := response.Error; err != nil {
 		return nil, err
 	}
 
-	// データなし
-	if len(users) == 0 {
-		return nil, fmt.Errorf("not found user")
+	return users[0], nil
+}
+
+/**
+ * ユーザーIDが存在するかチェック
+ */
+func (userDao *UserDao) ExistUserID(id string) error {
+	var user User
+
+	response := userDao.db.
+		Where("id = ?", id).
+		First(&user)
+
+	// DBエラー
+	// データ無しの場合もここに入る
+	if err := response.Error; err != nil {
+		return err
 	}
 
-	return users[0], nil
+	return nil
 }

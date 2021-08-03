@@ -31,8 +31,15 @@ type mutationResolver struct{ *Resolver }
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*models.Todo, error) {
 	log.Printf("[mutationResolver.CreateTodo] input: %v", input)
 
+	err := database.NewUserDao(r.DB).ExistUserID(input.UserID)
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
 	id := util.CreateUniqueID()
-	err := database.NewTodoDao(r.DB).InsertOne(
+	err = database.NewTodoDao(r.DB).InsertOne(
 		&database.Todo{
 			ID:        id,
 			Text:      input.Text,
