@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -61,13 +60,9 @@ func (todoDao *TodoDao) FindAll() ([]*Todo, error) {
 	response := todoDao.db.Find(&todos)
 
 	// DBエラー
+	// データ無しの場合もここに入る
 	if err := response.Error; err != nil {
 		return nil, err
-	}
-
-	// データなし
-	if len(todos) == 0 {
-		return nil, fmt.Errorf("not found todo")
 	}
 
 	return todos, nil
@@ -81,13 +76,9 @@ func (todoDao *TodoDao) FindOne(id string) (*Todo, error) {
 		First(&todo)
 
 	// DBエラー
+	// データ無しの場合もここに入る
 	if err := response.Error; err != nil {
 		return nil, err
-	}
-
-	// データなし
-	if todo == nil {
-		return nil, fmt.Errorf("not found todo")
 	}
 
 	return todo, nil
@@ -101,13 +92,9 @@ func (todoDao *TodoDao) FindByUserID(userID string) ([]*Todo, error) {
 		Find(&todos)
 
 	// DBエラー
+	// データ無しの場合もここに入る
 	if err := response.Error; err != nil {
 		return nil, err
-	}
-
-	// データなし
-	if len(todos) == 0 {
-		return nil, fmt.Errorf("not found todo")
 	}
 
 	return todos, nil
