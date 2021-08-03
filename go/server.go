@@ -33,11 +33,7 @@ func main() {
 	// time.Timeを扱うためにparseTime=trueが必要
 	// タイムゾーンをJSTにする
 	// ex.) user:password@tcp(127.0.0.1:3306)/testdb?parseTime=true&loc=Asia%2FTokyo
-	dataSource := os.Getenv("MYSQL_USER") + ":" +
-		os.Getenv("MYSQL_PASSWORD") +
-		"@tcp(" + os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT") + ")/" +
-		os.Getenv("MYSQL_DATABASE") +
-		"?parseTime=true&loc=Asia%2FTokyo"
+	dataSource := os.Getenv("MYSQL_DATASOURCE")
 
 	// DB接続
 	db, err := gorm.Open("mysql", dataSource)

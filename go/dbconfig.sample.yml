@@ -1,0 +1,4 @@
+development:
+  dialect: mysql
+  dir: src/migrations
+  datasource: localuser:localpass@tcp(mysql-graphql:3306)/localdb?parseTime=true&loc=Asia%2FTokyo

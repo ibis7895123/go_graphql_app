@@ -7,3 +7,8 @@ server-up:
 .PHONY: gqlgen-init
 gqlgen-init:
 	cd go && go run github.com/99designs/gqlgen init
+
+# sql-migrateのステータス確認
+.PHONY: migrate-status
+migrate-status:
+	docker-compose exec go-graphql sql-migrate status
