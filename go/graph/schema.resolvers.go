@@ -30,7 +30,31 @@ type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*models.Todo, error) {
 	log.Printf("[mutationResolver.CreateTodo] input: %v", input)
-	return &models.Todo{}, nil
+
+	id := util.CreateUniqueID()
+	err := database.NewTodoDao(r.DB).InsertOne(
+		&database.Todo{
+			ID:        id,
+			Text:      input.Text,
+			Done:      false,
+			UserID:    input.UserID,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		})
+
+	if err != nil {
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	return &models.Todo{
+		ID:        id,
+		Text:      input.Text,
+		Done:      false,
+		UserID:    input.UserID,
+		CreatedAt: time.Now().String(),
+		UpdatedAt: time.Now().String(),
+	}, nil
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*models.User, error) {
@@ -46,7 +70,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		})
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print(err.Error())
 		return nil, err
 	}
 
@@ -77,7 +101,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 	users, err := database.NewUserDao(r.DB).FindAll()
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print(err.Error())
 		return nil, err
 	}
 
@@ -103,7 +127,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*models.User, erro
 	user, err := database.NewUserDao(r.DB).FindOne(id)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print(err.Error())
 		return nil, err
 	}
 
@@ -125,7 +149,7 @@ func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User
 	user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Print(err.Error())
 		return nil, err
 	}
 
