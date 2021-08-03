@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/ibis7895123/go_graphql_app/graph"
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
+	"github.com/ibis7895123/go_graphql_app/src/util"
 	"github.com/jinzhu/gorm"
 	"go.uber.org/zap"
 
@@ -16,23 +17,27 @@ import (
 )
 
 const defaultPort = "8080"
-const dbUser = "localuser"
-const dbPassword = "localpass"
-const dbProtocol = "tcp(mysql-graphql:3306)"
-const dbName = "localdb"
-
-// time.Timeを扱うためにparseTime=trueが必要
-// タイムゾーンをJSTにする
-const dbConfig = dbUser + ":" + dbPassword + "@" + dbProtocol + "/" + dbName + "?parseTime=true&loc=Asia%2FTokyo"
 
 // ロガー
 var logger, _ = zap.NewDevelopment()
 
 func main() {
+	// envファイルのロード
+	util.EnvLoad()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
+
+	// time.Timeを扱うためにparseTime=trueが必要
+	// タイムゾーンをJSTにする
+	// ex.) user:password@tcp(127.0.0.1:3306)/testdb?parseTime=true&loc=Asia%2FTokyo
+	dbConfig := os.Getenv("MYSQL_USER") + ":" +
+		os.Getenv("MYSQL_PASSWORD") +
+		"@tcp(" + os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT") + ")/" +
+		os.Getenv("MYSQL_DATABASE") +
+		"?parseTime=true&loc=Asia%2FTokyo"
 
 	// DB接続
 	db, err := gorm.Open("mysql", dbConfig)
