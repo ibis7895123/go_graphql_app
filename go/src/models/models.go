@@ -4,7 +4,6 @@ type Todo struct {
 	ID        string `json:"id"`
 	Text      string `json:"text"`
 	Done      bool   `json:"done"`
-	UserID    string `json:"user_id"`
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 }

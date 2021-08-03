@@ -57,7 +57,9 @@ func (todoDao *TodoDao) InsertOne(todo *Todo) error {
 func (todoDao *TodoDao) FindAll() ([]*Todo, error) {
 	var todos []*Todo
 
-	response := todoDao.db.Find(&todos)
+	response := todoDao.db.
+		Order("updated_at desc").
+		Find(&todos)
 
 	// DBエラー
 	// データ無しの場合もここに入る
@@ -69,7 +71,7 @@ func (todoDao *TodoDao) FindAll() ([]*Todo, error) {
 }
 
 func (todoDao *TodoDao) FindOne(id string) (*Todo, error) {
-	var todo *Todo
+	var todo Todo
 
 	response := todoDao.db.
 		Where("id = ?", id).
@@ -81,7 +83,7 @@ func (todoDao *TodoDao) FindOne(id string) (*Todo, error) {
 		return nil, err
 	}
 
-	return todo, nil
+	return &todo, nil
 }
 
 func (todoDao *TodoDao) FindByUserID(userID string) ([]*Todo, error) {
