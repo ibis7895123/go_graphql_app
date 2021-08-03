@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: localdb
--- Generation Time: 2021-08-03 22:19:55.1810
+-- Generation Time: 2021-08-04 00:03:33.1650
 -- -------------------------------------------------------------
 
 
@@ -17,6 +17,13 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+DROP TABLE IF EXISTS `gorp_migrations`;
+CREATE TABLE `gorp_migrations` (
+  `id` varchar(255) NOT NULL,
+  `applied_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 DROP TABLE IF EXISTS `todo`;
 CREATE TABLE `todo` (
@@ -37,6 +44,10 @@ CREATE TABLE `user` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `gorp_migrations` (`id`, `applied_at`) VALUES
+('20210803222448-create_user.sql', '2021-08-04 00:00:44'),
+('20210803222500-create_todo.sql', '2021-08-04 00:01:27');
 
 INSERT INTO `todo` (`id`, `text`, `done`, `user_id`, `created_at`, `updated_at`) VALUES
 ('2816e2450873491581ad6c6a82e408e9', 'テントをはる', 0, 'd19b1061e2d649e1a245f31e36275902', '2021-08-03 14:22:30', '2021-08-03 15:31:21'),
