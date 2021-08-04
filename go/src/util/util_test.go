@@ -15,6 +15,11 @@ func Test_CreateUniqueID(t *testing.T) {
 
 func Test_EnvLoad(t *testing.T) {
 	// .env.sampleを呼ぶ
-	util.EnvLoad("../../.env.sample")
+	util.EnvLoad("/go_graphql_app/.env.sample")
 	assert.Equal(t, os.Getenv("ENV"), "local")
+}
+
+func Test_NewDB(t *testing.T) {
+	db := util.NewDB()
+	assert.NotNil(t, db)
 }
