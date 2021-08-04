@@ -15,10 +15,10 @@ func CreateUniqueID() string {
 /**
  * .envファイルのローディング
  */
-func EnvLoad() {
-	err := godotenv.Load()
+func EnvLoad(filePath string) {
+	err := godotenv.Load(filePath)
 
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal(err)
 	}
 }

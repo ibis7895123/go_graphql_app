@@ -23,7 +23,7 @@ var logger, _ = zap.NewDevelopment()
 
 func main() {
 	// envファイルのロード
-	util.EnvLoad()
+	util.EnvLoad(".env")
 
 	port := os.Getenv("PORT")
 	if port == "" {
