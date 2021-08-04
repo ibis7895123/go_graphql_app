@@ -12,3 +12,9 @@ gqlgen-init:
 .PHONY: migrate-status
 migrate-status:
 	docker-compose exec go-graphql sql-migrate status
+
+# テスト実行
+# src内のすべてのテストファイルを実行する
+.PHONY: test
+test:
+	cd go && go test -v ./src/...
