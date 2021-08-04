@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: localdb
--- Generation Time: 2021-08-04 00:03:33.1650
+-- Generation Time: 2021-08-04 14:24:10.5120
 -- -------------------------------------------------------------
 
 
@@ -33,7 +33,9 @@ CREATE TABLE `todo` (
   `user_id` varchar(64) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_user_id` (`user_id`),
+  CONSTRAINT `todo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DROP TABLE IF EXISTS `user`;
@@ -47,7 +49,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `gorp_migrations` (`id`, `applied_at`) VALUES
 ('20210803222448-create_user.sql', '2021-08-04 00:00:44'),
-('20210803222500-create_todo.sql', '2021-08-04 00:01:27');
+('20210803222500-create_todo.sql', '2021-08-04 00:01:27'),
+('20210804000518-add_forign_key_in_todo.sql', '2021-08-04 00:13:49');
 
 INSERT INTO `todo` (`id`, `text`, `done`, `user_id`, `created_at`, `updated_at`) VALUES
 ('2816e2450873491581ad6c6a82e408e9', 'テントをはる', 0, 'd19b1061e2d649e1a245f31e36275902', '2021-08-03 14:22:30', '2021-08-03 15:31:21'),
