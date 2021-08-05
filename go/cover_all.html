@@ -55,7 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/ibis7895123/go_graphql_app/graph/schema.resolvers.go (11.9%)</option>
+				<option value="file0">github.com/ibis7895123/go_graphql_app/graph/schema.resolvers.go (20.9%)</option>
 				
 				<option value="file1">github.com/ibis7895123/go_graphql_app/src/config/env.go (71.4%)</option>
 				
@@ -92,7 +92,7 @@ import (
 )
 
 // Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver <span class="cov0" title="0">{ return &amp;mutationResolver{r} }</span>
+func (r *Resolver) Mutation() generated.MutationResolver <span class="cov8" title="1">{ return &amp;mutationResolver{r} }</span>
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver <span class="cov8" title="1">{ return &amp;queryResolver{r} }</span>
@@ -140,7 +140,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
         }, nil</span>
 }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*models.User, error) <span class="cov0" title="0">{
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*models.User, error) <span class="cov8" title="1">{
         logger.Logger.Info("[mutationResolver.CreateUser] ", zap.Any("input", input))
 
         id := util.CreateUniqueID()
@@ -157,7 +157,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
                 return nil, err
         }</span>
 
-        <span class="cov0" title="0">return &amp;models.User{
+        <span class="cov8" title="1">return &amp;models.User{
                 ID:        id,
                 Name:      input.Name,
                 CreatedAt: time.Now().String(),
