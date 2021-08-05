@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_CreateUniqueID(t *testing.T) {
+func Test_正常系_CreateUniqueID(t *testing.T) {
 	id := util.CreateUniqueID()
 	assert.Equal(t, len(id), 32)
 }
 
-func Test_NewDB(t *testing.T) {
+func Test_正常系_NewDB(t *testing.T) {
 	db := util.NewDB()
 	assert.NotNil(t, db)
 }
