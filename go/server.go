@@ -17,10 +17,7 @@ import (
 
 func main() {
 	// DB接続
-	db := util.NewDB()
-
-	// DB終了処理(エラー時はエラーを返す)
-	defer db.Close()
+	db := util.NewDB("mysql")
 
 	// DBの参照を渡す
 	srv := handler.NewDefaultServer(
