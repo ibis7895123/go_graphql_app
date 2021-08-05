@@ -8,12 +8,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/ibis7895123/go_graphql_app/graph"
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
+	"github.com/ibis7895123/go_graphql_app/src/models"
 	"github.com/ibis7895123/go_graphql_app/src/util"
-	"go.uber.org/zap"
+	"github.com/stretchr/testify/assert"
 )
-
-// ロガー
-var logger, _ = zap.NewDevelopment()
 
 // DB接続
 var db = util.NewDB()
@@ -28,13 +26,24 @@ var srv = handler.NewDefaultServer(
 )
 
 func Test_正常系_全ユーザ取得(t *testing.T) {
-	// DB終了処理(エラー時はエラーを返す)
+	expected_user_latest := models.User{
+		ID:        "72412640063b46bc8ace2baf32dc838e",
+		Name:      "バンデューラ",
+		CreatedAt: "2021-08-03 19:44:29 +0900 JST",
+		UpdatedAt: "2021-08-03 19:44:29 +0900 JST",
+	}
+
+	// DB終了処理
 	defer db.Close()
 
 	client := client.New(srv)
-	var response interface{}
+	var response struct {
+		Users []models.User
+	}
 
-	client.Post(`query { users { id, name } }`, &response)
+	// httpリクエスト
+	client.Post(`query { users { id, name, created_at, updated_at } }`, &response)
 
-	logger.Debug("response", zap.Any("users", response))
+	assert.Equal(t, len(response.Users), 8)
+	assert.Equal(t, response.Users[0], expected_user_latest)
 }
