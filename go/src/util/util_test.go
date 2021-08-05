@@ -13,6 +13,11 @@ func Test_正常系_CreateUniqueID(t *testing.T) {
 }
 
 func Test_正常系_NewDB(t *testing.T) {
-	db := util.NewDB()
+	db := util.NewDB("mysql")
+	assert.NotNil(t, db)
+}
+
+func Test_正常系_NewTestDB(t *testing.T) {
+	db := util.NewTestDB()
 	assert.NotNil(t, db)
 }
