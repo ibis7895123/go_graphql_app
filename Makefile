@@ -19,7 +19,7 @@ migrate-status:
 .PHONY: test-all
 test-all:
 	docker-compose exec go-graphql go test -v -cover -coverprofile=cover.out ./...
-	docker-compose exec go-graphql go tool cover -html=cover.out -o cover.html
+	docker-compose exec go-graphql go tool cover -html=cover.out -o cover_all.html
 	docker-compose exec go-graphql rm -f cover.out
 
 # 指定したテスト実行
