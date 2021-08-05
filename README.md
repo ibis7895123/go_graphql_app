@@ -3,17 +3,17 @@ todoとユーザを登録するサーバ
 
 ## 主要な使用パッケージ
 - github.com/99designs/gqlgen
-  - GraphQLサーバ
+    - GraphQLサーバ
 -	github.com/go-sql-driver/mysql
-  - mysqlのドライバ
+    - mysqlのドライバ
 -	github.com/google/uuid
-  - ランダムなuuidの生成
+    - ランダムなuuidの生成
 -	github.com/jinzhu/gorm
-  - データベースのORマッパー
+    - データベースのORマッパー
 -	github.com/joho/godotenv
-  - envファイルを扱う
+    - envファイルを扱う
 -	go.uber.org/zap
-  - ログの出力
+    - ログの出力
 
 ## 環境構築
 1. docker起動 `docker-compose up -d`
