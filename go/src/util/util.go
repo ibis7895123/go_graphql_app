@@ -1,14 +1,12 @@
 package util
 
 import (
-	"log"
-	"os"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
+	"github.com/ibis7895123/go_graphql_app/src/config"
 	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
 )
 
 func CreateUniqueID() string {
@@ -16,24 +14,10 @@ func CreateUniqueID() string {
 }
 
 /**
- * .envファイルのローディング
- */
-func EnvLoad(filePath string) {
-	err := godotenv.Load(filePath)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-/**
  * DBの接続
  */
 func NewDB() *gorm.DB {
-	// NOTE: envファイルの絶対パスを設定する
-	EnvLoad("/go_graphql_app/.env")
-
-	dataSource := os.Getenv("MYSQL_DATASOURCE")
+	dataSource := config.Config.MYSQL_DATASOURCE
 
 	if dataSource == "" {
 		panic("DataSource is empty. ")
