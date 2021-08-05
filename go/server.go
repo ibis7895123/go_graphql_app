@@ -3,19 +3,17 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/ibis7895123/go_graphql_app/graph"
 	"github.com/ibis7895123/go_graphql_app/graph/generated"
+	"github.com/ibis7895123/go_graphql_app/src/config"
 	"github.com/ibis7895123/go_graphql_app/src/util"
 	"go.uber.org/zap"
 
 	_ "github.com/go-sql-driver/mysql"
 )
-
-const defaultPort = "8080"
 
 // ロガー
 var logger, _ = zap.NewDevelopment()
@@ -36,10 +34,7 @@ func main() {
 		),
 	)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
+	port := config.Config.PORT
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

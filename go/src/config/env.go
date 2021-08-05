@@ -15,7 +15,7 @@ var Config ConfigStruct
 
 type ConfigStruct struct {
 	ENV              string `env:"ENV"`
-	PORT             string `env:"PORT"`
+	PORT             string `env:"PORT" envDefault:"8080"`
 	MYSQL_DATASOURCE string `env:"MYSQL_DATASOURCE"`
 }
 
