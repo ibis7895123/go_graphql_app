@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// NOTE: envファイルの絶対パスを設定する
+// NOTE: envファイルの絶対パスを設定する(いろいろなところから呼ばれるため)
 // dockerコンテナのパスを設定
 const envFilePath = "/go_graphql_app/.env"
 

@@ -15,6 +15,9 @@ migrate-status:
 
 # テスト実行
 # goフォルダ内のすべてのテストファイルを実行する
+# カバレッジ解析したcover.htmlを出力する
 .PHONY: test
 test:
-	docker-compose exec go-graphql go test -v ./...
+	docker-compose exec go-graphql go test -v -cover -coverprofile=cover.out ./...
+	docker-compose exec go-graphql go tool cover -html=cover.out -o cover.html
+	docker-compose exec go-graphql rm -f cover.out
