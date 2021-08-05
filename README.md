@@ -24,9 +24,12 @@ todoとユーザを登録するサーバ
 - 全テストコマンド
 `make test-all`
 
-- 個別のテストコマンド(例)
-`make test SRC=./src/util/util.go`
-`make test SRC=./src/util`
+- フォルダ / ファイルテストコマンド(例)
+`make test-file src=./src/util/util.go`
+`make test-file src=./src/util`
+
+- 関数テストコマンド(例)
+`make test-func src=./src/util func=Test_正常系_CreateUniqueID`
 
 ### テストのカバレッジ結果
 [cover.html](go/cover.html)

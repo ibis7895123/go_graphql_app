@@ -23,10 +23,17 @@ test-all:
 	docker-compose exec go-graphql rm -f cover.out
 
 # 指定したテスト実行
-# FILE= で指定したフォルダ、ファイルを実行する
+# src= で指定したフォルダ、ファイルを実行する
 # カバレッジ解析したcover.htmlを出力する
-.PHONY: test
-test:
-	docker-compose exec go-graphql go test -v -cover -coverprofile=cover.out $(SRC)
+.PHONY: test-file
+test-file:
+	docker-compose exec go-graphql go test -v -cover -coverprofile=cover.out $(src)
 	docker-compose exec go-graphql go tool cover -html=cover.out -o cover.html
 	docker-compose exec go-graphql rm -f cover.out
+
+# 指定したテスト実行(関数)
+# src= で指定したフォルダ、ファイル内の
+# func= で指定したテスト関数のみを実行する
+.PHONY: test-func
+test-func:
+	docker-compose exec go-graphql go test -v $(src) -run $(func)
