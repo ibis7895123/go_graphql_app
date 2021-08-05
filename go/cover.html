@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Go Coverage Report</title>
+		<title>graph: Go Coverage Report</title>
 		<style>
 			body {
 				background: black;
@@ -55,26 +55,351 @@
 			<div id="nav">
 				<select id="files">
 				
+				<option value="file0">github.com/ibis7895123/go_graphql_app/graph/schema.resolvers.go (11.9%)</option>
+				
+				<option value="file1">github.com/ibis7895123/go_graphql_app/src/config/env.go (71.4%)</option>
+				
+				<option value="file2">github.com/ibis7895123/go_graphql_app/src/util/util.go (77.8%)</option>
+				
 				</select>
 			</div>
 			<div id="legend">
 				<span>not tracked</span>
 			
-				<span class="cov0">no coverage</span>
-				<span class="cov1">low coverage</span>
-				<span class="cov2">*</span>
-				<span class="cov3">*</span>
-				<span class="cov4">*</span>
-				<span class="cov5">*</span>
-				<span class="cov6">*</span>
-				<span class="cov7">*</span>
-				<span class="cov8">*</span>
-				<span class="cov9">*</span>
-				<span class="cov10">high coverage</span>
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
 			
 			</div>
 		</div>
 		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package graph
+
+// This file will be automatically regenerated based on the schema, any resolver implementations
+// will be copied through when generating and any unknown code will be moved to the end.
+
+import (
+        "context"
+        "time"
+
+        "github.com/ibis7895123/go_graphql_app/graph/generated"
+        "github.com/ibis7895123/go_graphql_app/graph/model"
+        "github.com/ibis7895123/go_graphql_app/src/database"
+        "github.com/ibis7895123/go_graphql_app/src/models"
+        "github.com/ibis7895123/go_graphql_app/src/util"
+        "go.uber.org/zap"
+)
+
+// ロガー
+var logger, _ = zap.NewDevelopment()
+
+// Mutation returns generated.MutationResolver implementation.
+func (r *Resolver) Mutation() generated.MutationResolver <span class="cov0" title="0">{ return &amp;mutationResolver{r} }</span>
+
+// Query returns generated.QueryResolver implementation.
+func (r *Resolver) Query() generated.QueryResolver <span class="cov8" title="1">{ return &amp;queryResolver{r} }</span>
+
+func (r *Resolver) Todo() generated.TodoResolver <span class="cov0" title="0">{ return &amp;todoResolver{r} }</span>
+
+func (r *Resolver) User() generated.UserResolver <span class="cov0" title="0">{ return &amp;userResolver{r} }</span>
+
+// 更新スキーマ関数
+type mutationResolver struct{ *Resolver }
+
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*models.Todo, error) <span class="cov0" title="0">{
+        logger.Info("[mutationResolver.CreateTodo] ", zap.Any("input", input))
+
+        // ユーザーIDがあるかどうかチェック
+        err := database.NewUserDao(r.DB).ExistUserID(input.UserID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">id := util.CreateUniqueID()
+        err = database.NewTodoDao(r.DB).InsertOne(
+                &amp;database.Todo{
+                        ID:        id,
+                        Text:      input.Text,
+                        Done:      false,
+                        UserID:    input.UserID,
+                        CreatedAt: time.Now(),
+                        UpdatedAt: time.Now(),
+                })
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Todo{
+                ID:        id,
+                Text:      input.Text,
+                Done:      false,
+                CreatedAt: time.Now().String(),
+                UpdatedAt: time.Now().String(),
+        }, nil</span>
+}
+
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*models.User, error) <span class="cov0" title="0">{
+        logger.Info("[mutationResolver.CreateUser] ", zap.Any("input", input))
+
+        id := util.CreateUniqueID()
+        err := database.NewUserDao(r.DB).InsertOne(
+                &amp;database.User{
+                        ID:        id,
+                        Name:      input.Name,
+                        CreatedAt: time.Now(),
+                        UpdatedAt: time.Now(),
+                })
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.User{
+                ID:        id,
+                Name:      input.Name,
+                CreatedAt: time.Now().String(),
+                UpdatedAt: time.Now().String(),
+        }, nil</span>
+}
+
+// GETスキーマ関数
+type queryResolver struct{ *Resolver }
+
+func (r *queryResolver) Todos(ctx context.Context) ([]*models.Todo, error) <span class="cov0" title="0">{
+        logger.Info("[queryResolver.Todos]")
+
+        todos, err := database.NewTodoDao(r.DB).FindAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        // jsonデータに変換
+        <span class="cov0" title="0">var jsonTodos []*models.Todo
+        for _, todo := range todos </span><span class="cov0" title="0">{
+                jsonTodos = append(
+                        jsonTodos,
+                        &amp;models.Todo{
+                                ID:        todo.ID,
+                                Text:      todo.Text,
+                                Done:      todo.Done,
+                                CreatedAt: todo.CreatedAt.String(),
+                                UpdatedAt: todo.UpdatedAt.String(),
+                        })
+        }</span>
+
+        <span class="cov0" title="0">return jsonTodos, nil</span>
+}
+
+func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, error) <span class="cov0" title="0">{
+        logger.Info("[queryResolver.Todo] ", zap.String("id", id))
+
+        todo, err := database.NewTodoDao(r.DB).FindOne(id)
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Todo{
+                ID:        todo.ID,
+                Text:      todo.Text,
+                Done:      todo.Done,
+                CreatedAt: todo.CreatedAt.String(),
+                UpdatedAt: todo.UpdatedAt.String(),
+        }, nil</span>
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) <span class="cov8" title="1">{
+        logger.Info("[queryResolver.Users]")
+
+        users, err := database.NewUserDao(r.DB).FindAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        // jsonデータに変換
+        <span class="cov8" title="1">var jsonUsers []*models.User
+        for _, user := range users </span><span class="cov8" title="1">{
+                jsonUsers = append(
+                        jsonUsers,
+                        &amp;models.User{
+                                ID:        user.ID,
+                                Name:      user.Name,
+                                CreatedAt: user.CreatedAt.String(),
+                                UpdatedAt: user.UpdatedAt.String(),
+                        })
+        }</span>
+
+        <span class="cov8" title="1">return jsonUsers, nil</span>
+}
+
+func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) <span class="cov0" title="0">{
+        logger.Info("[queryResolver.User] ", zap.String("id", id))
+
+        user, err := database.NewUserDao(r.DB).FindOne(id)
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.User{
+                ID:        user.ID,
+                Name:      user.Name,
+                CreatedAt: user.CreatedAt.String(),
+                UpdatedAt: user.UpdatedAt.String(),
+        }, nil</span>
+}
+
+type todoResolver struct{ *Resolver }
+
+// todoが呼ばれたときにuserを取得
+func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (*models.User, error) <span class="cov0" title="0">{
+        logger.Info("[todoResolver.User] ", zap.Any("todo", obj))
+
+        // todoIDからユーザーを取得
+        user, err := database.NewUserDao(r.DB).FindByTodoID(obj.ID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.User{
+                ID:        user.ID,
+                Name:      user.Name,
+                CreatedAt: user.CreatedAt.String(),
+                UpdatedAt: user.UpdatedAt.String(),
+        }, nil</span>
+}
+
+type userResolver struct{ *Resolver }
+
+// userが呼ばれたときにtodosを取得
+func (r *userResolver) Todos(ctx context.Context, obj *models.User) ([]*models.Todo, error) <span class="cov0" title="0">{
+        logger.Info("[userResolver.Todos] ", zap.Any("user", obj))
+
+        // ユーザーIDからtodosを取得
+        todos, err := database.NewTodoDao(r.DB).FindByUserID(obj.ID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error(err.Error())
+                return nil, err
+        }</span>
+
+        // jsonデータに変換
+        <span class="cov0" title="0">var jsonTodos []*models.Todo
+        for _, todo := range todos </span><span class="cov0" title="0">{
+                jsonTodos = append(
+                        jsonTodos,
+                        &amp;models.Todo{
+                                ID:        todo.ID,
+                                Text:      todo.Text,
+                                Done:      todo.Done,
+                                CreatedAt: todo.CreatedAt.String(),
+                                UpdatedAt: todo.UpdatedAt.String(),
+                        })
+        }</span>
+
+        <span class="cov0" title="0">return jsonTodos, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package config
+
+import (
+        "log"
+
+        "github.com/caarlos0/env/v6"
+        "github.com/joho/godotenv"
+)
+
+// NOTE: envファイルの絶対パスを設定する(いろいろなところから呼ばれるため)
+// dockerコンテナのパスを設定
+const envFilePath = "/go_graphql_app/.env"
+
+var Config ConfigStruct
+
+type ConfigStruct struct {
+        ENV              string `env:"ENV"`
+        PORT             string `env:"PORT" envDefault:"8080"`
+        MYSQL_DATASOURCE string `env:"MYSQL_DATASOURCE"`
+}
+
+/**
+ * configパッケージローディング時に呼ばれる
+ */
+func init() <span class="cov8" title="1">{
+        EnvLoad(envFilePath)
+
+        // envファイルの中身をセット
+        err := env.Parse(&amp;Config)
+
+        if err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+}
+
+/**
+ * .envファイルのローディング
+ */
+func EnvLoad(filePath string) <span class="cov8" title="1">{
+        err := godotenv.Load(filePath)
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package util
+
+import (
+        "strings"
+
+        _ "github.com/go-sql-driver/mysql"
+        "github.com/google/uuid"
+        "github.com/ibis7895123/go_graphql_app/src/config"
+        "github.com/jinzhu/gorm"
+)
+
+func CreateUniqueID() string <span class="cov8" title="1">{
+        return strings.Replace(uuid.New().String(), "-", "", -1)
+}</span>
+
+/**
+ * DBの接続
+ */
+func NewDB() *gorm.DB <span class="cov8" title="1">{
+        dataSource := config.Config.MYSQL_DATASOURCE
+
+        if dataSource == "" </span><span class="cov0" title="0">{
+                panic("DataSource is empty. ")</span>
+        }
+
+        // DB接続
+        <span class="cov8" title="1">db, err := gorm.Open("mysql", dataSource)
+
+        // DB起動エラー返す
+        if err != nil || db == nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+
+        // ログ出力をON
+        <span class="cov8" title="1">db.LogMode(true)
+
+        return db</span>
+}
+</pre>
 		
 		</div>
 	</body>
